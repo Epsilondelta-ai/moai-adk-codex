@@ -1,0 +1,12 @@
+{
+  "name": "moai-adk-codex",
+  "version": "0.1.0",
+  "description": "MoAI-ADK compatibility layer for Codex",
+  "bin": {
+    "moai": "./bin/moai.js"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "license": "MIT"
+}
