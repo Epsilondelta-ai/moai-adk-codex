@@ -1,17 +1,17 @@
 # coai
 
-coai is a Codex-oriented reimplementation and compatibility layer inspired by the original [MoAI-ADK](https://github.com/modu-ai/moai-adk).
+coai 是一个面向 Codex 的重实现 / 兼容层，其灵感来自原始项目 [MoAI-ADK](https://github.com/modu-ai/moai-adk)。
 
 [English](./README.md) · [한국어](./README.ko.md) · [日本語](./README.ja.md) · [中文](./README.zh.md)
 
-## What It Is
+## 简介
 
-- a compiled Go CLI named `coai`
-- a Codex-focused workflow surface that keeps MoAI-style subcommands
-- a `.coai/` project state layout with legacy `.moai/` read fallback
-- a standard-library-only implementation with optional `codex exec` handoff
+- 一个名为 `coai` 的 Go CLI
+- 保留 MoAI 风格子命令的 Codex 工作流界面
+- 使用 `.coai/` 作为规范状态目录，同时保留对旧 `.moai/` 的读取兼容
+- 仅使用标准库实现，并可在需要时委托给 `codex exec`
 
-## Current Commands
+## 当前命令
 
 - `coai init`
 - `coai update`
@@ -32,9 +32,9 @@ coai is a Codex-oriented reimplementation and compatibility layer inspired by th
 - `coai glm`
 - `coai worktree list|status|new|remove`
 
-## Install
+## 安装
 
-Upstream-style installer entrypoints are available in this repository.
+仓库提供了与原始 `moai-adk` 类似的安装入口。
 
 ### macOS / Linux / WSL
 
@@ -50,31 +50,31 @@ irm https://raw.githubusercontent.com/Epsilondelta-ai/moai-adk-codex/main/instal
 
 ### Windows Batch
 
-Download and run `install.bat`.
+下载并运行 `install.bat`。
 
-Notes:
+说明：
 
-- The installer tries GitHub Releases first.
-- If a matching release asset exists, users do not need Go installed.
-- If no matching release asset exists, it falls back to building from source, which requires Go.
-- For local testing, use `install.sh --source-dir "$PWD"` or `install.ps1 -SourceDir $PWD`.
+- 安装器会优先尝试 GitHub Release 二进制包。
+- 如果存在匹配的发布资产，用户不需要安装 Go。
+- 如果没有匹配的发布资产，会自动回退到源码构建，此时需要 Go。
+- 本地测试可使用 `install.sh --source-dir "$PWD"` 或 `install.ps1 -SourceDir $PWD`。
 
-Release assets are published from this repository by pushing a tag like `v0.3.0`.
+发布资产会在向此仓库推送 `v0.3.0` 这类标签时自动生成。
 
-## Build
+## 构建
 
 ```bash
 make build
 ./bin/coai version
 ```
 
-Without `make`:
+直接构建：
 
 ```bash
 /home/pi/.local/go/bin/go build -o bin/coai ./cmd/coai
 ```
 
-## Usage
+## 用法
 
 ```bash
 ./bin/coai init .
@@ -85,16 +85,16 @@ Without `make`:
 ./bin/coai codemaps
 ```
 
-To hand a workflow to Codex non-interactively:
+若要直接交给 Codex：
 
 ```bash
 ./bin/coai plan "Add auth compatibility" --execute
 ./bin/coai run SPEC-ADD-AUTH-COMPATIBILITY-001 --execute
 ```
 
-## Generated Files
+## 生成文件
 
-`coai init` creates:
+`coai init` 会生成：
 
 - `AGENTS.md`
 - `.coai/config/sections/project.yaml`
@@ -109,14 +109,14 @@ To hand a workflow to Codex non-interactively:
 - `.coai/state/runtime.json`
 - `.coai/manifest.json`
 
-## Testing
+## 测试
 
 ```bash
 make test
 ```
 
-## Notes
+## 备注
 
-- The original project is [MoAI-ADK](https://github.com/modu-ai/moai-adk).
-- coai uses `.coai/` as the canonical state directory.
-- Legacy `.moai/` directories are still read for compatibility.
+- 原始项目是 [MoAI-ADK](https://github.com/modu-ai/moai-adk)。
+- coai 使用 `.coai/` 作为规范状态目录。
+- 旧的 `.moai/` 目录仍保留只读兼容能力。

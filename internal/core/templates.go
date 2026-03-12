@@ -16,7 +16,7 @@ func BuildTemplates(projectName, initializedAt string) []TemplateFile {
 				"## Intent\n" +
 				"- Preserve the familiar MoAI command vocabulary inside Codex.\n" +
 				"- Treat `.coai/` as the public project contract.\n" +
-				"- Use Codex/OMX as the execution engine.\n\n" +
+				"- Use Codex as the execution engine.\n\n" +
 				"## Suggested usage\n" +
 				"- `coai project`\n" +
 				"- `coai plan \"Describe the task\"`\n" +

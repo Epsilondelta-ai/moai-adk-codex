@@ -29,7 +29,7 @@ func CreateSpec(projectRoot, description string) (core.SpecResult, error) {
 
 ## Acceptance Criteria
 
-- Implementation is compatible with Codex/OMX.
+- Implementation is compatible with Codex.
 - Changes are verifiable via tests or command outputs.
 - Documentation is updated when behavior changes.
 `, specID, description)
@@ -199,7 +199,7 @@ func buildPrompt(command, summary, specID string) string {
 	if specID != "" {
 		header += " " + specID
 	}
-	return fmt.Sprintf("%s\n\nSummary: %s\n\nUse Codex/OMX-compatible behavior and preserve .coai artifacts.", header, summary)
+	return fmt.Sprintf("%s\n\nSummary: %s\n\nUse Codex-compatible behavior and preserve .coai artifacts.", header, summary)
 }
 
 func defaultSummary(command string) string {
