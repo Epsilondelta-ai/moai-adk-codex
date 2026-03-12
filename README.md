@@ -1,36 +1,37 @@
 # moai-adk-codex
 
-MoAI-ADK compatibility layer for Codex and OMX.
+MoAI-ADK compatibility layer for Codex and OMX, exposed as the `moai-codex` command.
 
-This project preserves the familiar MoAI command surface while swapping the execution engine to Codex-native behavior. The current implementation is intentionally pragmatic:
+This project preserves the familiar MoAI command surface while swapping the execution engine to a Go-based Codex-native implementation.
 
-- keep `moai` command names and `.moai/` project structure
+- ship a compiled Go CLI named `moai-codex`
+- keep the MoAI subcommand vocabulary and `.moai/` project structure
 - generate compatibility artifacts and project docs locally
 - support optional `codex exec` handoff with `--execute`
-- avoid new runtime dependencies by using Node.js built-ins only
+- stay dependency-light by using the Go standard library only
 
 ## Current Scope
 
 Implemented now:
 
-- `moai init`
-- `moai update`
-- `moai status`
-- `moai doctor`
-- `moai project`
-- `moai plan`
-- `moai run`
-- `moai sync`
-- `moai review`
-- `moai coverage`
-- `moai clean`
-- `moai fix`
-- `moai loop`
-- `moai codemaps`
-- `moai cc`
-- `moai cg`
-- `moai glm`
-- `moai worktree list|status|new|remove`
+- `moai-codex init`
+- `moai-codex update`
+- `moai-codex status`
+- `moai-codex doctor`
+- `moai-codex project`
+- `moai-codex plan`
+- `moai-codex run`
+- `moai-codex sync`
+- `moai-codex review`
+- `moai-codex coverage`
+- `moai-codex clean`
+- `moai-codex fix`
+- `moai-codex loop`
+- `moai-codex codemaps`
+- `moai-codex cc`
+- `moai-codex cg`
+- `moai-codex glm`
+- `moai-codex worktree list|status|new|remove`
 
 Behavior model:
 
@@ -41,41 +42,46 @@ Behavior model:
 
 ## Requirements
 
-- Node.js 22+
+- Go 1.26.1+
 - Git
 - Codex CLI available on `PATH` for `--execute`
+
+## Build
+
+```bash
+make build
+./bin/moai-codex version
+```
+
+Without `make`:
+
+```bash
+/home/pi/.local/go/bin/go build -o bin/moai-codex ./cmd/moai-codex
+```
 
 ## Usage
 
 Run directly:
 
 ```bash
-node bin/moai.js init .
-node bin/moai.js status --json
-node bin/moai.js plan "Add auth compatibility"
-node bin/moai.js run SPEC-ADD-AUTH-COMPATIBILITY-001
-node bin/moai.js review
-node bin/moai.js codemaps
-```
-
-Or install the local binary into your shell:
-
-```bash
-npm link
-moai init .
-moai plan "Add auth compatibility"
+./bin/moai-codex init .
+./bin/moai-codex status --json
+./bin/moai-codex plan "Add auth compatibility"
+./bin/moai-codex run SPEC-ADD-AUTH-COMPATIBILITY-001
+./bin/moai-codex review
+./bin/moai-codex codemaps
 ```
 
 To hand a workflow to Codex non-interactively:
 
 ```bash
-moai plan "Add auth compatibility" --execute
-moai run SPEC-ADD-AUTH-COMPATIBILITY-001 --execute
+./bin/moai-codex plan "Add auth compatibility" --execute
+./bin/moai-codex run SPEC-ADD-AUTH-COMPATIBILITY-001 --execute
 ```
 
 ## Generated Files
 
-`moai init` creates:
+`moai-codex init` creates:
 
 - `AGENTS.md`
 - `.moai/config/sections/project.yaml`
@@ -93,10 +99,10 @@ moai run SPEC-ADD-AUTH-COMPATIBILITY-001 --execute
 ## Testing
 
 ```bash
-npm test
+make test
 ```
 
-The test suite uses the built-in Node test runner and covers scaffold creation, update safety, status/doctor behavior, SPEC generation, run artifacts, and runtime mode switching.
+The Go test suite covers scaffold creation, update safety, status/doctor behavior, SPEC generation, run artifacts, project/codemap refresh, and runtime mode switching.
 
 ## Notes
 
