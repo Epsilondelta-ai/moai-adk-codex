@@ -47,6 +47,32 @@ Behavior model:
 - Git
 - Codex CLI available on `PATH` for `--execute`
 
+## Install
+
+Upstream-style install entrypoints are provided at the repo root:
+
+### macOS / Linux / WSL
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Epsilondelta-ai/moai-adk-codex/main/install.sh | bash
+```
+
+### Windows PowerShell
+
+```powershell
+irm https://raw.githubusercontent.com/Epsilondelta-ai/moai-adk-codex/main/install.ps1 | iex
+```
+
+### Windows Batch
+
+Download and run `install.bat`.
+
+Notes:
+
+- The installer tries GitHub Releases first.
+- If a matching release asset is not available, it falls back to building from source.
+- For local testing or local builds, use `install.sh --source-dir "$PWD"` or `install.ps1 -SourceDir $PWD`.
+
 ## Build
 
 ```bash
