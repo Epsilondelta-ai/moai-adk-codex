@@ -101,3 +101,13 @@ test("status does not treat home directory .moai as project root", () => {
   assert.equal(payload.projectRoot, dir);
   assert.equal(payload.initialized, false);
 });
+
+test("project and codemaps commands refresh generated docs", () => {
+  const dir = makeTempDir();
+  runCli(["init", "."], dir);
+  runCli(["project", "Compatibility docs for the repo"], dir);
+  runCli(["codemaps"], dir);
+
+  assert.match(fs.readFileSync(path.join(dir, ".moai", "project", "product.md"), "utf8"), /Compatibility docs/);
+  assert.ok(fs.existsSync(path.join(dir, ".moai", "project", "codemaps", "overview.md")));
+});

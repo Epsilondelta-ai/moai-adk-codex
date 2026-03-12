@@ -1,5 +1,8 @@
 .DS_Store
 coverage/
 tmp/
+.omx/logs/
 .omx/state/
+.omx/metrics.json
+.omx/tmux-hook.json
 .moai/
