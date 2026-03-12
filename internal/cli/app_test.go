@@ -24,7 +24,7 @@ func TestInitCreatesScaffoldAndManifest(t *testing.T) {
 	if payload["command"] != "init" {
 		t.Fatalf("command = %v, want init", payload["command"])
 	}
-	if _, err := os.Stat(filepath.Join(dir, ".moai", "manifest.json")); err != nil {
+	if _, err := os.Stat(filepath.Join(dir, ".coai", "manifest.json")); err != nil {
 		t.Fatalf("manifest missing: %v", err)
 	}
 	if _, err := os.Stat(filepath.Join(dir, "AGENTS.md")); err != nil {
@@ -205,12 +205,12 @@ func TestDoctorReportsScaffoldAvailability(t *testing.T) {
 
 	found := false
 	for _, check := range payload.Checks {
-		if check.Name == ".moai scaffold" && check.OK {
+		if check.Name == ".coai scaffold" && check.OK {
 			found = true
 		}
 	}
 	if !found {
-		t.Fatalf("expected .moai scaffold check to pass")
+		t.Fatalf("expected .coai scaffold check to pass")
 	}
 }
 
@@ -245,14 +245,52 @@ func TestProjectAndCodemapsRefreshDocs(t *testing.T) {
 		t.Fatalf("Run(codemaps): %v", err)
 	}
 
-	product, err := os.ReadFile(filepath.Join(dir, ".moai", "project", "product.md"))
+	product, err := os.ReadFile(filepath.Join(dir, ".coai", "project", "product.md"))
 	if err != nil {
 		t.Fatalf("os.ReadFile(product): %v", err)
 	}
 	if !bytes.Contains(product, []byte("Compatibility docs")) {
 		t.Fatalf("product.md did not contain updated content")
 	}
-	if _, err := os.Stat(filepath.Join(dir, ".moai", "project", "codemaps", "overview.md")); err != nil {
+	if _, err := os.Stat(filepath.Join(dir, ".coai", "project", "codemaps", "overview.md")); err != nil {
 		t.Fatalf("overview.md missing: %v", err)
+	}
+}
+
+func TestStatusSupportsLegacyMoaiFallback(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(dir, ".moai", "state"), 0o755); err != nil {
+		t.Fatalf("os.MkdirAll: %v", err)
+	}
+	if err := os.MkdirAll(filepath.Join(dir, ".moai", "config", "sections"), 0o755); err != nil {
+		t.Fatalf("os.MkdirAll: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, ".moai", "state", "runtime.json"), []byte("{\"currentRuntimeMode\":\"cg\"}\n"), 0o644); err != nil {
+		t.Fatalf("os.WriteFile runtime: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, ".moai", "config", "sections", "project.yaml"), []byte("project:\n  name: legacy\n"), 0o644); err != nil {
+		t.Fatalf("os.WriteFile project: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, ".moai", "config", "sections", "quality.yaml"), []byte("constitution:\n  development_mode: ddd\n"), 0o644); err != nil {
+		t.Fatalf("os.WriteFile quality: %v", err)
+	}
+
+	stdout := &bytes.Buffer{}
+	if err := Run([]string{"status", "--json"}, stdout, &bytes.Buffer{}, func() (string, error) { return dir, nil }); err != nil {
+		t.Fatalf("Run(status legacy): %v", err)
+	}
+
+	var payload map[string]any
+	if err := json.Unmarshal(stdout.Bytes(), &payload); err != nil {
+		t.Fatalf("json.Unmarshal: %v", err)
+	}
+	if payload["initialized"] != true {
+		t.Fatalf("initialized = %v, want true", payload["initialized"])
+	}
+	if payload["projectName"] != "legacy" {
+		t.Fatalf("projectName = %v, want legacy", payload["projectName"])
+	}
+	if payload["developmentMode"] != "ddd" {
+		t.Fatalf("developmentMode = %v, want ddd", payload["developmentMode"])
 	}
 }

@@ -6,4 +6,5 @@ tmp/
 .omx/state/
 .omx/metrics.json
 .omx/tmux-hook.json
+.coai/
 .moai/

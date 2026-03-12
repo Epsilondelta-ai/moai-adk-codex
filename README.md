@@ -5,7 +5,7 @@ MoAI-ADK compatibility layer for Codex and OMX, exposed as the `coai` command.
 This project preserves the familiar MoAI command surface while swapping the execution engine to a Go-based Codex-native implementation.
 
 - ship a compiled Go CLI named `coai`
-- keep the MoAI subcommand vocabulary and `.moai/` project structure
+- keep the MoAI subcommand vocabulary while using `.coai/` as the canonical project structure
 - generate compatibility artifacts and project docs locally
 - support optional `codex exec` handoff with `--execute`
 - stay dependency-light by using the Go standard library only
@@ -35,10 +35,11 @@ Implemented now:
 
 Behavior model:
 
-- `init` and `update` manage a Codex-compatible scaffold and `.moai/manifest.json`
-- workflow commands create MoAI-shaped artifacts under `.moai/project/` and `.moai/specs/`
+- `init` and `update` manage a Codex-compatible scaffold and `.coai/manifest.json`
+- workflow commands create MoAI-shaped artifacts under `.coai/project/` and `.coai/specs/`
 - `--execute` additionally runs `codex exec` with a prepared compatibility prompt
-- runtime mode commands update `.moai` state so status output reflects the active mode
+- runtime mode commands update `.coai` state so status output reflects the active mode
+- legacy `.moai/` directories are still read for compatibility
 
 ## Requirements
 
@@ -84,17 +85,17 @@ To hand a workflow to Codex non-interactively:
 `coai init` creates:
 
 - `AGENTS.md`
-- `.moai/config/sections/project.yaml`
-- `.moai/config/sections/workflow.yaml`
-- `.moai/config/sections/quality.yaml`
-- `.moai/config/sections/llm.yaml`
-- `.moai/config/sections/compatibility.yaml`
-- `.moai/project/product.md`
-- `.moai/project/structure.md`
-- `.moai/project/tech.md`
-- `.moai/project/codemaps/overview.md`
-- `.moai/state/runtime.json`
-- `.moai/manifest.json`
+- `.coai/config/sections/project.yaml`
+- `.coai/config/sections/workflow.yaml`
+- `.coai/config/sections/quality.yaml`
+- `.coai/config/sections/llm.yaml`
+- `.coai/config/sections/compatibility.yaml`
+- `.coai/project/product.md`
+- `.coai/project/structure.md`
+- `.coai/project/tech.md`
+- `.coai/project/codemaps/overview.md`
+- `.coai/state/runtime.json`
+- `.coai/manifest.json`
 
 ## Testing
 
@@ -107,5 +108,5 @@ The Go test suite covers scaffold creation, update safety, status/doctor behavio
 ## Notes
 
 - This is a compatibility-first reimplementation, not a byte-for-byte port of Claude-specific MoAI internals.
-- Home-directory `~/.moai` state is intentionally not treated as a project root.
+- Home-directory `~/.coai` and legacy `~/.moai` state are intentionally not treated as project roots.
 - Runtime log/state noise under `.omx/` is ignored from git by default.

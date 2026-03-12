@@ -8,6 +8,11 @@ import (
 	"time"
 )
 
+const (
+	primaryControlDir = ".coai"
+	legacyControlDir  = ".moai"
+)
+
 type runtimeState struct {
 	CurrentRuntimeMode string `json:"currentRuntimeMode"`
 	CurrentSpec        string `json:"currentSpec"`
@@ -24,10 +29,10 @@ func EnsureProjectScaffold(projectRoot string, forceUpdate bool) (ScaffoldResult
 		return ScaffoldResult{}, err
 	}
 
-	manifestPath := filepath.Join(root, ".moai", "manifest.json")
-	manifest := Manifest{Files: map[string]ManifestEntry{}}
-	if err := ReadJSON(manifestPath, &manifest); err != nil {
-		manifest = Manifest{Files: map[string]ManifestEntry{}}
+	manifestPath := filepath.Join(primaryControlRoot(root), "manifest.json")
+	manifest, err := loadOrMigrateManifest(root)
+	if err != nil {
+		return ScaffoldResult{}, err
 	}
 
 	created := []string{}
@@ -95,19 +100,20 @@ func EnsureProjectScaffold(projectRoot string, forceUpdate bool) (ScaffoldResult
 		Created:     created,
 		Updated:     updated,
 		Skipped:     skipped,
-		Manifest:    ".moai/manifest.json",
+		Manifest:    filepath.ToSlash(filepath.Join(primaryControlDir, "manifest.json")),
 	}, nil
 }
 
 func ReadProjectStatus(projectRoot string) (ProjectStatus, error) {
 	root := FindProjectRoot(projectRoot)
+	controlRoot, source := controlRootForRead(root)
 
 	state := runtimeState{CurrentRuntimeMode: "cg"}
-	_ = ReadJSON(filepath.Join(root, ".moai", "state", "runtime.json"), &state)
-	projectConfig := ReadSimpleYAML(filepath.Join(root, ".moai", "config", "sections", "project.yaml"))
-	qualityConfig := ReadSimpleYAML(filepath.Join(root, ".moai", "config", "sections", "quality.yaml"))
+	_ = ReadJSON(filepath.Join(controlRoot, "state", "runtime.json"), &state)
+	projectConfig := ReadSimpleYAML(filepath.Join(controlRoot, "config", "sections", "project.yaml"))
+	qualityConfig := ReadSimpleYAML(filepath.Join(controlRoot, "config", "sections", "quality.yaml"))
 	manifest := Manifest{Files: map[string]ManifestEntry{}}
-	_ = ReadJSON(filepath.Join(root, ".moai", "manifest.json"), &manifest)
+	_ = ReadJSON(filepath.Join(controlRoot, "manifest.json"), &manifest)
 
 	projectName := filepath.Base(root)
 	if projectSection, ok := projectConfig["project"].(map[string]any); ok {
@@ -131,22 +137,28 @@ func ReadProjectStatus(projectRoot string) (ProjectStatus, error) {
 		LastCommand:     state.LastCommand,
 		DevelopmentMode: developmentMode,
 		ManagedFiles:    len(manifest.Files),
-		Initialized:     dirExists(filepath.Join(root, ".moai")),
+		Initialized:     source != "",
 	}, nil
 }
 
 func SetRuntimeMode(projectRoot, mode string) (ModeResult, error) {
 	root := FindProjectRoot(projectRoot)
-
-	state := runtimeState{}
-	_ = ReadJSON(filepath.Join(root, ".moai", "state", "runtime.json"), &state)
-	state.CurrentRuntimeMode = mode
-	state.LastCommand = mode
-	if err := WriteJSON(filepath.Join(root, ".moai", "state", "runtime.json"), state); err != nil {
+	if err := EnsureDir(filepath.Join(primaryControlRoot(root), "state")); err != nil {
+		return ModeResult{}, err
+	}
+	if err := EnsureDir(filepath.Join(primaryControlRoot(root), "config", "sections")); err != nil {
 		return ModeResult{}, err
 	}
 
-	if err := os.WriteFile(filepath.Join(root, ".moai", "config", "sections", "llm.yaml"), []byte("llm:\n  current_runtime_mode: "+mode+"\n  provider: codex\n"), 0o644); err != nil {
+	state := runtimeState{}
+	_ = ReadJSON(filepath.Join(primaryControlRoot(root), "state", "runtime.json"), &state)
+	state.CurrentRuntimeMode = mode
+	state.LastCommand = mode
+	if err := WriteJSON(filepath.Join(primaryControlRoot(root), "state", "runtime.json"), state); err != nil {
+		return ModeResult{}, err
+	}
+
+	if err := os.WriteFile(filepath.Join(primaryControlRoot(root), "config", "sections", "llm.yaml"), []byte("llm:\n  current_runtime_mode: "+mode+"\n  provider: codex\n"), 0o644); err != nil {
 		return ModeResult{}, err
 	}
 
@@ -159,14 +171,22 @@ func SetRuntimeMode(projectRoot, mode string) (ModeResult, error) {
 
 func RunDoctor(projectRoot string) DoctorReport {
 	root, _ := filepath.Abs(projectRoot)
+	scaffoldOK := dirExists(primaryControlRoot(root)) || dirExists(legacyControlRoot(root))
+	scaffoldDetails := "missing"
+	switch {
+	case dirExists(primaryControlRoot(root)):
+		scaffoldDetails = "present (.coai)"
+	case dirExists(legacyControlRoot(root)):
+		scaffoldDetails = "present (.moai legacy)"
+	}
 	checks := []Check{
 		checkBinary("go", "Go runtime"),
 		checkBinary("git", "Git"),
 		checkBinary("codex", "Codex CLI"),
 		{
-			Name:    ".moai scaffold",
-			OK:      dirExists(filepath.Join(root, ".moai")),
-			Details: ternary(dirExists(filepath.Join(root, ".moai")), "present", "missing"),
+			Name:    ".coai scaffold",
+			OK:      scaffoldOK,
+			Details: scaffoldDetails,
 		},
 	}
 
@@ -186,7 +206,7 @@ func FindProjectRoot(startDir string) string {
 	homeDir, _ = filepath.Abs(homeDir)
 
 	for {
-		if dirExists(filepath.Join(current, ".moai")) && current != homeDir {
+		if current != homeDir && (dirExists(primaryControlRoot(current)) || dirExists(legacyControlRoot(current))) {
 			return current
 		}
 		parent := filepath.Dir(current)
@@ -199,7 +219,10 @@ func FindProjectRoot(startDir string) string {
 
 func UpdateRuntime(projectRoot string, patch RuntimePatch) error {
 	root := FindProjectRoot(projectRoot)
-	filePath := filepath.Join(root, ".moai", "state", "runtime.json")
+	filePath := filepath.Join(primaryControlRoot(root), "state", "runtime.json")
+	if err := EnsureDir(filepath.Dir(filePath)); err != nil {
+		return err
+	}
 	current := runtimeState{}
 	_ = ReadJSON(filePath, &current)
 
@@ -247,4 +270,44 @@ func ternary[T any](condition bool, left, right T) T {
 		return left
 	}
 	return right
+}
+
+func primaryControlRoot(root string) string {
+	return filepath.Join(root, primaryControlDir)
+}
+
+func legacyControlRoot(root string) string {
+	return filepath.Join(root, legacyControlDir)
+}
+
+func controlRootForRead(root string) (string, string) {
+	switch {
+	case dirExists(primaryControlRoot(root)):
+		return primaryControlRoot(root), primaryControlDir
+	case dirExists(legacyControlRoot(root)):
+		return legacyControlRoot(root), legacyControlDir
+	default:
+		return primaryControlRoot(root), ""
+	}
+}
+
+func loadOrMigrateManifest(root string) (Manifest, error) {
+	manifest := Manifest{Files: map[string]ManifestEntry{}}
+	if err := ReadJSON(filepath.Join(primaryControlRoot(root), "manifest.json"), &manifest); err == nil {
+		if manifest.Files == nil {
+			manifest.Files = map[string]ManifestEntry{}
+		}
+		return manifest, nil
+	}
+
+	legacyManifest := Manifest{Files: map[string]ManifestEntry{}}
+	if err := ReadJSON(filepath.Join(legacyControlRoot(root), "manifest.json"), &legacyManifest); err == nil {
+		migrated := Manifest{Files: map[string]ManifestEntry{}}
+		for key, entry := range legacyManifest.Files {
+			migrated.Files[strings.Replace(key, legacyControlDir+"/", primaryControlDir+"/", 1)] = entry
+		}
+		return migrated, nil
+	}
+
+	return manifest, nil
 }
