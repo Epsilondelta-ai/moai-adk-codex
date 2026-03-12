@@ -2,9 +2,6 @@
 /bin/coai
 coverage/
 tmp/
-.omx/logs/
-.omx/state/
-.omx/metrics.json
-.omx/tmux-hook.json
+/.omx/
 .coai/
 .moai/
