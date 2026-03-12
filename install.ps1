@@ -41,7 +41,7 @@ function Get-Platform {
   $arch = if ($env:ARCHITEW6432) { $env:ARCHITEW6432 } else { $env:PROCESSOR_ARCHITECTURE }
   switch ($arch.ToUpper()) {
     "AMD64" { return "windows_amd64" }
-    "X86"   { return "windows_amd64" }
+    "X86"   { return "windows_386" }
     "ARM64" { return "windows_arm64" }
     default { throw "Unsupported architecture: $arch" }
   }

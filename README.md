@@ -32,6 +32,14 @@ coai is a Codex-oriented reimplementation and compatibility layer inspired by th
 - `coai glm`
 - `coai worktree list|status|new|remove`
 
+## Supported Release Targets
+
+Release assets are prepared for these targets:
+
+- Linux: `386`, `amd64`, `armv6`, `armv7`, `arm64`, `ppc64le`, `riscv64`, `s390x`
+- macOS: `amd64`, `arm64`
+- Windows: `386`, `amd64`, `arm64`
+
 ## Install
 
 Upstream-style installer entrypoints are available in this repository.

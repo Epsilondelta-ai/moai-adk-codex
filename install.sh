@@ -96,8 +96,14 @@ detect_platform() {
   esac
 
   case "$arch" in
+    i386|i486|i586|i686) ARCH="386" ;;
     x86_64|amd64) ARCH="amd64" ;;
+    armv6l) ARCH="armv6" ;;
+    armv7l) ARCH="armv7" ;;
     arm64|aarch64) ARCH="arm64" ;;
+    ppc64le) ARCH="ppc64le" ;;
+    riscv64) ARCH="riscv64" ;;
+    s390x) ARCH="s390x" ;;
     *)
       print_error "Unsupported architecture: $arch"
       exit 1
