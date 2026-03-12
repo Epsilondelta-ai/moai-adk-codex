@@ -6,14 +6,14 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/Epsilondelta-ai/moai-adk-codex/internal/core"
-	"github.com/Epsilondelta-ai/moai-adk-codex/internal/workflows"
+	"github.com/Epsilondelta-ai/coai/internal/core"
+	"github.com/Epsilondelta-ai/coai/internal/workflows"
 )
 
-const HelpText = `MoAI Codex Compatibility CLI
+const HelpText = `CoAI Compatibility CLI
 
 Usage:
-  moai-codex <command> [args]
+  coai <command> [args]
 
 Core commands:
   init [path]        Initialize a Codex-compatible MoAI scaffold
@@ -72,7 +72,7 @@ func Run(argv []string, stdout io.Writer, _ io.Writer, getwd getwdFunc) error {
 		_, _ = io.WriteString(stdout, HelpText+"\n")
 		return nil
 	case "version", "--version", "-V":
-		_, _ = io.WriteString(stdout, "moai-codex 0.2.0\n")
+		_, _ = io.WriteString(stdout, "coai 0.2.0\n")
 		return nil
 	case "init":
 		target, err := resolveTargetPath(cwd, firstOrDefault(parsed.Args, "."))

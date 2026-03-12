@@ -1,3 +1,3 @@
-module github.com/Epsilondelta-ai/moai-adk-codex
+module github.com/Epsilondelta-ai/coai
 
 go 1.26.1

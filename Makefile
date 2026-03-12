@@ -1,11 +1,11 @@
 GO ?= /home/pi/.local/go/bin/go
-BINARY := bin/moai-codex
+BINARY := bin/coai
 
 .PHONY: build test fmt
 
 build:
 	mkdir -p bin
-	$(GO) build -o $(BINARY) ./cmd/moai-codex
+	$(GO) build -o $(BINARY) ./cmd/coai
 
 test:
 	$(GO) test ./...

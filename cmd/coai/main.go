@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Epsilondelta-ai/moai-adk-codex/internal/cli"
+	"github.com/Epsilondelta-ai/coai/internal/cli"
 )
 
 func main() {

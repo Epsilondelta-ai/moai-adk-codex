@@ -1,10 +1,10 @@
-# moai-adk-codex
+# coai
 
-MoAI-ADK compatibility layer for Codex and OMX, exposed as the `moai-codex` command.
+MoAI-ADK compatibility layer for Codex and OMX, exposed as the `coai` command.
 
 This project preserves the familiar MoAI command surface while swapping the execution engine to a Go-based Codex-native implementation.
 
-- ship a compiled Go CLI named `moai-codex`
+- ship a compiled Go CLI named `coai`
 - keep the MoAI subcommand vocabulary and `.moai/` project structure
 - generate compatibility artifacts and project docs locally
 - support optional `codex exec` handoff with `--execute`
@@ -14,24 +14,24 @@ This project preserves the familiar MoAI command surface while swapping the exec
 
 Implemented now:
 
-- `moai-codex init`
-- `moai-codex update`
-- `moai-codex status`
-- `moai-codex doctor`
-- `moai-codex project`
-- `moai-codex plan`
-- `moai-codex run`
-- `moai-codex sync`
-- `moai-codex review`
-- `moai-codex coverage`
-- `moai-codex clean`
-- `moai-codex fix`
-- `moai-codex loop`
-- `moai-codex codemaps`
-- `moai-codex cc`
-- `moai-codex cg`
-- `moai-codex glm`
-- `moai-codex worktree list|status|new|remove`
+- `coai init`
+- `coai update`
+- `coai status`
+- `coai doctor`
+- `coai project`
+- `coai plan`
+- `coai run`
+- `coai sync`
+- `coai review`
+- `coai coverage`
+- `coai clean`
+- `coai fix`
+- `coai loop`
+- `coai codemaps`
+- `coai cc`
+- `coai cg`
+- `coai glm`
+- `coai worktree list|status|new|remove`
 
 Behavior model:
 
@@ -50,13 +50,13 @@ Behavior model:
 
 ```bash
 make build
-./bin/moai-codex version
+./bin/coai version
 ```
 
 Without `make`:
 
 ```bash
-/home/pi/.local/go/bin/go build -o bin/moai-codex ./cmd/moai-codex
+/home/pi/.local/go/bin/go build -o bin/coai ./cmd/coai
 ```
 
 ## Usage
@@ -64,24 +64,24 @@ Without `make`:
 Run directly:
 
 ```bash
-./bin/moai-codex init .
-./bin/moai-codex status --json
-./bin/moai-codex plan "Add auth compatibility"
-./bin/moai-codex run SPEC-ADD-AUTH-COMPATIBILITY-001
-./bin/moai-codex review
-./bin/moai-codex codemaps
+./bin/coai init .
+./bin/coai status --json
+./bin/coai plan "Add auth compatibility"
+./bin/coai run SPEC-ADD-AUTH-COMPATIBILITY-001
+./bin/coai review
+./bin/coai codemaps
 ```
 
 To hand a workflow to Codex non-interactively:
 
 ```bash
-./bin/moai-codex plan "Add auth compatibility" --execute
-./bin/moai-codex run SPEC-ADD-AUTH-COMPATIBILITY-001 --execute
+./bin/coai plan "Add auth compatibility" --execute
+./bin/coai run SPEC-ADD-AUTH-COMPATIBILITY-001 --execute
 ```
 
 ## Generated Files
 
-`moai-codex init` creates:
+`coai init` creates:
 
 - `AGENTS.md`
 - `.moai/config/sections/project.yaml`
