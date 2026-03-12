@@ -67,7 +67,7 @@ irm https://raw.githubusercontent.com/Epsilondelta-ai/moai-adk-codex/main/instal
 - 一致する release asset がなければ、ソースビルドへ自動的にフォールバックし、その場合は Go が必要です。
 - ローカル確認には `install.sh --source-dir "$PWD"` または `install.ps1 -SourceDir $PWD` を使えます。
 
-release asset は、このリポジトリに `v0.3.0` のようなタグを push すると公開されます。
+release asset は、このリポジトリに `v0.4.0` のようなタグを push すると公開されます。
 
 ## ビルド
 

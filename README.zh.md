@@ -67,7 +67,7 @@ irm https://raw.githubusercontent.com/Epsilondelta-ai/moai-adk-codex/main/instal
 - 如果没有匹配的发布资产，会自动回退到源码构建，此时需要 Go。
 - 本地测试可使用 `install.sh --source-dir "$PWD"` 或 `install.ps1 -SourceDir $PWD`。
 
-发布资产会在向此仓库推送 `v0.3.0` 这类标签时自动生成。
+发布资产会在向此仓库推送 `v0.4.0` 这类标签时自动生成。
 
 ## 构建
 

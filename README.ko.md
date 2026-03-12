@@ -67,7 +67,7 @@ irm https://raw.githubusercontent.com/Epsilondelta-ai/moai-adk-codex/main/instal
 - 일치하는 릴리스 자산이 없으면 소스 빌드로 자동 fallback 하며, 이 경우 Go가 필요합니다.
 - 로컬 테스트는 `install.sh --source-dir "$PWD"` 또는 `install.ps1 -SourceDir $PWD`를 사용하면 됩니다.
 
-릴리스 자산은 이 저장소에 `v0.3.0` 같은 태그를 푸시하면 발행됩니다.
+릴리스 자산은 이 저장소에 `v0.4.0` 같은 태그를 푸시하면 발행됩니다.
 
 ## 빌드
 

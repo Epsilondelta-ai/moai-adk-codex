@@ -72,7 +72,7 @@ func Run(argv []string, stdout io.Writer, _ io.Writer, getwd getwdFunc) error {
 		_, _ = io.WriteString(stdout, HelpText+"\n")
 		return nil
 	case "version", "--version", "-V":
-		_, _ = io.WriteString(stdout, "coai 0.2.0\n")
+		_, _ = io.WriteString(stdout, "coai 0.4.0\n")
 		return nil
 	case "init":
 		target, err := resolveTargetPath(cwd, firstOrDefault(parsed.Args, "."))

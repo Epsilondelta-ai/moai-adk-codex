@@ -67,7 +67,7 @@ Notes:
 - If no matching release asset exists, it falls back to building from source, which requires Go.
 - For local testing, use `install.sh --source-dir "$PWD"` or `install.ps1 -SourceDir $PWD`.
 
-Release assets are published from this repository by pushing a tag like `v0.3.0`.
+Release assets are published from this repository by pushing a tag like `v0.4.0`.
 
 ## Build
 
