@@ -1,6 +1,6 @@
-# coai
+# MoAI-ADK for Codex
 
-coai は、元の [MoAI-ADK](https://github.com/modu-ai/moai-adk) に着想を得た、Codex 向けの再実装 / 互換レイヤーです。
+coai は、元の [MoAI-ADK](https://github.com/modu-ai/moai-adk) に着想を得た Codex 向けの再実装 / 互換レイヤーであり、ここでは MoAI-ADK for Codex として案内します。
 
 [English](./README.md) · [한국어](./README.ko.md) · [日本語](./README.ja.md) · [中文](./README.zh.md)
 

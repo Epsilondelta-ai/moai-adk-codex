@@ -1,6 +1,6 @@
-# coai
+# MoAI-ADK for Codex
 
-coai is a Codex-oriented reimplementation and compatibility layer inspired by the original [MoAI-ADK](https://github.com/modu-ai/moai-adk).
+coai is a Codex-oriented reimplementation and compatibility layer inspired by the original [MoAI-ADK](https://github.com/modu-ai/moai-adk), presented here as MoAI-ADK for Codex.
 
 [English](./README.md) · [한국어](./README.ko.md) · [日本語](./README.ja.md) · [中文](./README.zh.md)
 

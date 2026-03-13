@@ -1,6 +1,6 @@
-# coai
+# MoAI-ADK for Codex
 
-coai는 원본 [MoAI-ADK](https://github.com/modu-ai/moai-adk)에서 영감을 받은 Codex 중심 재구현/호환 레이어입니다.
+coai는 원본 [MoAI-ADK](https://github.com/modu-ai/moai-adk)에서 영감을 받은 Codex 중심 재구현/호환 레이어이며, 여기서는 MoAI-ADK for Codex로 소개합니다.
 
 [English](./README.md) · [한국어](./README.ko.md) · [日本語](./README.ja.md) · [中文](./README.zh.md)
 

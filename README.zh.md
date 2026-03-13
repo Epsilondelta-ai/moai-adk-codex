@@ -1,6 +1,6 @@
-# coai
+# MoAI-ADK for Codex
 
-coai 是一个面向 Codex 的重实现 / 兼容层，其灵感来自原始项目 [MoAI-ADK](https://github.com/modu-ai/moai-adk)。
+coai 是一个面向 Codex 的重实现 / 兼容层，灵感来自原始项目 [MoAI-ADK](https://github.com/modu-ai/moai-adk)，这里将其表述为 MoAI-ADK for Codex。
 
 [English](./README.md) · [한국어](./README.ko.md) · [日本語](./README.ja.md) · [中文](./README.zh.md)
 
